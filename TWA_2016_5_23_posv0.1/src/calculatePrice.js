@@ -1,4 +1,3 @@
-
 function getTotalPrice(cartItems) {
     var totalPrice = 0;
     var cartItemKey = Object.keys(cartItems);
@@ -10,8 +9,3 @@ function getTotalPrice(cartItems) {
 function getCartItemPrice(cartItems, key) {
     return cartItems[key].price * cartItems[key].count;
 }
-
-
-
-
-
