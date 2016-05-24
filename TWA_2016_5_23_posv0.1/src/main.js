@@ -1,18 +1,17 @@
 //TODO: Please write code in this file.
 
 function printInventory(inputs) {
-    var arr = [];
-    var arrBarCode = [];
+    var cartItems = [];
+    var cartItemsBarCode = [];
     var totalPrice = 0;
-    var jsonInputData = eval(inputs);
-    var result = "***<没钱赚商店>购物清单***\n";
-    jsonInputData.forEach(function (element) {
+
+    inputs.forEach(function (element) {
         var key = element.barcode;
-        if (arr[key]) {
-            arr[key].num++;
-            arr[key].sumPrice += arr[key].price;
+        if (cartItems[key]) {
+            cartItems[key].num++;
+            cartItems[key].sumPrice += cartItems[key].price;
         } else {
-            arr[element.barcode] = {
+            cartItems[element.barcode] = {
                 barcode: element.barcode,
                 name: element.name,
                 unit: element.unit,
@@ -20,20 +19,33 @@ function printInventory(inputs) {
                 sumPrice: element.price,
                 num: 1
             };
-            arrBarCode.push(element.barcode);
+            cartItemsBarCode.push(element.barcode);
 
         }
-        totalPrice += arr[key].price;
+        totalPrice += cartItems[key].price;
 
-    }, this);
-
-    arrBarCode.forEach(function (element) {
-        var key = element;
-        result += "名称：" + arr[key].name + "，数量：" + arr[key].num + "瓶，单价：" + arr[key].price.toFixed(2) + "(元)，小计：" + (arr[key].num * arr[key].price).toFixed(2) + "(元)\n";
-    }, this);
-    result += "----------------------\n" +
-        "总计：" + totalPrice.toFixed(2) + "(元)\n" +
-        "**********************";
-    console.log(result);
+    });
+    
+    var resultString = spliceInventoryResultString(cartItems,cartItemsBarCode,totalPrice);
+    console.log(resultString);
 }
+
+function spliceInventoryResultString(cartItems, cartItemsBarCode, totalPrice) {
+    var resultContent = "";
+    var resultTitle = "***<没钱赚商店>购物清单***\n";
+    var resultDivile = "----------------------\n";
+    var resultStar = "**********************";
+    cartItemsBarCode.forEach(function (item) {
+        resultContent += getSingleCartItemInventoryString(cartItems, item);
+    });
+    return resultTitle + resultContent + resultDivile + "总计：" + totalPrice.toFixed(2) + "(元)\n" + resultStar;
+}
+
+function getSingleCartItemInventoryString(cartItems, key) {
+    var singleCartItemResult = "";
+    singleCartItemResult = "名称：" + cartItems[key].name + "，数量：" + cartItems[key].num + "瓶，单价：" + cartItems[key].price.toFixed(2) + "(元)，小计：" + (cartItems[key].num * cartItems[key].price).toFixed(2) + "(元)\n";
+    return singleCartItemResult;
+}
+
+
 
